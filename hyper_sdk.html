@@ -1,0 +1,28 @@
+<script type="text/javascript" src="https://demo.microstrategy.com/MicroStrategyLibrary/static/hyper/sdk/js/mstr_hyper.bundle.js"></script>
+<script>
+window.addEventListener('load', function () {
+    mstrHyper.start({
+        server: 'https://your-library-server/MicroStrategyLibrary/', // Replace with your actual Library Server URL
+        auth: {
+            authMode: mstrHyper.AUTH_MODES.SAML, // Switch to SAML mode
+            idpUrl: 'https://your-idp-url/saml/sso', // Replace with your IdP SAML SSO URL
+            entityId: 'your-entity-id', // Replace with your SAML entity ID
+            relayState: 'optional-relay-state' // Optional: Relay state for SAML flow
+        },
+        onAuthRequired: function (authConfig) {
+            // Handle SAML authentication if required (e.g., redirect to IdP)
+            window.location.href = authConfig.idpUrl + '?SAMLRequest=' + encodeURIComponent(authConfig.samlRequest);
+        },
+        onAuthSuccess: function (token) {
+            console.log('SAML authentication successful, token received:', token);
+        },
+        onAuthError: function (error) {
+            console.error('SAML authentication failed:', error);
+        }
+    }).then(function () {
+        console.log('MicroStrategy HyperIntelligence with SAML is initialized.');
+    }).catch(function (error) {
+        console.error('Error initializing Hyper SDK:', error);
+    });
+});
+</script>
